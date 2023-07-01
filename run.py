@@ -70,7 +70,7 @@ def validate_input(expense_data):
         print("Category cannot be empty.")
         category = input("Enter the category: ").strip().capitalize()
     
-    # Cate validation
+    # Date validation
     while True:
         try:
             # Create a datetime object from the input string to ensure it's valid
@@ -101,6 +101,7 @@ def update_worksheet(data, worksheet_name):
     worksheet.append_row(data)
 
 
+
 def get_expenses_in_date_range(start_date, end_date, worksheet):
     """
     Retrieves expenses within a given date range from the worksheet.
@@ -129,6 +130,19 @@ def get_expenses_in_date_range(start_date, end_date, worksheet):
             
     return expenses_in_range
 
+def get_date_range_from_user():
+    """
+    Prompts the user for the start and end dates of a range.
+    
+    Returns:
+        start_date (str): The start date in 'YYYY-MM-DD' format.
+        end_date (str): The end date in 'YYYY-MM-DD' format.
+    """
+    print("Please enter a date range:")
+    start_date = input("Enter the start date (YYYY-MM-DD): ")
+    end_date = input("Enter the end date (YYYY-MM-DD): ")
+    return start_date, end_date
+
 
 def calculate_total_expenses(expenses):
     """
@@ -144,12 +158,52 @@ def calculate_total_expenses(expenses):
     return sum(float(expense[1]) for expense in expenses)
 
 
+def display_total_expenses(total_expenses, start_date, end_date):
+    """
+    Displays total expenses in a formatted string.
+    
+    Parameters:
+        total_expenses (float): The total expenses.
+        start_date (str): The start date in 'YYYY-MM-DD' format.
+        end_date (str): The end date in 'YYYY-MM-DD' format.
+        
+    Returns:
+        str: Formatted string displaying the total expenses.
+    """
+    return f'Total expenses in range from {start_date} to {end_date} is: ${total_expenses:.2f}'
+
+
+def calculate_daily_average(total_expenses, num_days):
+    """
+    Calculates the daily average expense.
+    
+    Parameters:
+        total_expenses (float): The total expenses.
+        num_days (int): The number of days.
+        
+    Returns:
+        float: The daily average.
+    """
+    return total_expenses / num_days
+
+
 # expense_data = add_expense()
 # validated_data = validate_input(expense_data)
 # update_worksheet(validated_data,'expenses')
 # print("Data successfully added to the expenses worksheet") 
 
 worksheet_instance = SHEET.worksheet('expenses')
-expenses_in_range = get_expenses_in_date_range('2023-07-01', '2023-07-03', worksheet_instance)
-calculated_expenses = calculate_total_expenses(expenses_in_range)
-print(calculated_expenses)
+start_date, end_date = get_date_range_from_user()
+expenses_in_range = get_expenses_in_date_range(start_date, end_date, worksheet_instance)
+total_expenses_in_range = calculate_total_expenses(expenses_in_range)
+print(display_total_expenses(total_expenses_in_range, start_date, end_date))
+
+# Convert start_date and end_date to datetime objects for subtraction
+start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
+
+# Calculate number of days
+num_of_days = (end_date_obj - start_date_obj).days + 1 # +1 to include the end_date
+
+daily_average = calculate_daily_average(total_expenses_in_range, num_of_days)
+print(f"Daily average: ${daily_average:.2f}")
