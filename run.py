@@ -28,9 +28,9 @@ def add_expense():
     
     print('Welcome to your personal Expenses Tracker')
     
-    # expense details
+    # Expense details
     amount = input("Enter the amount: $")
-    category = input("Enter the category: ").strip().capitalize() # clear white space and capitalize first letter
+    category = input("Enter the category: ").strip().capitalize() # Clear white space and capitalize first letter
     date = input("Enter the date (YYYY-MM-DD): ")
     
     return [amount, category, date]
@@ -49,13 +49,13 @@ def validate_input(expense_data):
     # Unpack the list into variables
     amount, category, date = expense_data
 
-    # amount validation
+    # Amount validation
     while True:
         try:
-            # convert amount to float to ensure it's a number
+            # Convert amount to float to ensure it's a number
             amount_float = float(amount)
             
-            # ensure amount has at most 2 decimal places
+            # Ensure amount has at most 2 decimal places
             if '.' in amount and len(amount.split('.')[1]) > 2:
                 raise ValueError
                 
@@ -65,15 +65,15 @@ def validate_input(expense_data):
             print("Please enter a valid amount.")
             amount = input("Enter the amount: $")
 
-    # category validation
+    # Category validation
     while not category:
         print("Category cannot be empty.")
         category = input("Enter the category: ").strip().capitalize()
     
-    # date validation
+    # Cate validation
     while True:
         try:
-            # create a datetime object from the input string to ensure it's valid
+            # Create a datetime object from the input string to ensure it's valid
             datetime.strptime(date, '%Y-%m-%d')
             break  
             
@@ -94,14 +94,47 @@ def update_worksheet(data, worksheet_name):
     """
     worksheet = SHEET.worksheet(worksheet_name)
 
-    # calculate ID column value and prepent it to the data list
+    # Calculate ID column value and prepent it to the data list
     next_id = len(worksheet.get_all_values())
     data.insert(0, next_id)
 
     worksheet.append_row(data)
 
-expense_data = add_expense()
-validated_data = validate_input(expense_data)
-update_worksheet(validated_data,'expenses')
-print("Data successfully added to the expenses worksheet") 
 
+def get_expenses_in_date_range(start_date, end_date, worksheet):
+    """
+    Retrieves expenses within a given date range from the worksheet.
+    
+    Parameters:
+        start_date (str): The start date in 'YYYY-MM-DD' format.
+        end_date (str): The end date in 'YYYY-MM-DD' format.
+        worksheet (gspread Worksheet instance): The worksheet.
+        
+    Returns:
+        list: A list of expenses within the date range.
+    """
+    # Convert date strings to datetime objects
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    
+    # Get all expenses from the worksheet without the header
+    all_expenses = worksheet.get_all_values()[1:]
+    
+    # Loop through data and filter based on data
+    expenses_in_range = []
+    for expense in all_expenses:
+        expense_date = datetime.strptime(expense[3], '%Y-%m-%d')
+        if start_date <= expense_date <= end_date:
+            expenses_in_range.append(expense)
+            
+    return expenses_in_range
+
+
+# expense_data = add_expense()
+# validated_data = validate_input(expense_data)
+# update_worksheet(validated_data,'expenses')
+# print("Data successfully added to the expenses worksheet") 
+
+worksheet_instance = SHEET.worksheet('expenses')
+expenses_in_range = get_expenses_in_date_range('2023-07-01', '2023-07-03', worksheet_instance)
+print(expenses_in_range)
