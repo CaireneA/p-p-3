@@ -130,6 +130,20 @@ def get_expenses_in_date_range(start_date, end_date, worksheet):
     return expenses_in_range
 
 
+def calculate_total_expenses(expenses):
+    """
+    Calculates total expenses for a given list of expenses.
+    
+    Parameters:
+        expenses (list): A list of expenses.
+        
+    Returns:
+        float: The total expenses.
+    """
+    # Add up the amounts from the expenses list
+    return sum(float(expense[1]) for expense in expenses)
+
+
 # expense_data = add_expense()
 # validated_data = validate_input(expense_data)
 # update_worksheet(validated_data,'expenses')
@@ -137,4 +151,5 @@ def get_expenses_in_date_range(start_date, end_date, worksheet):
 
 worksheet_instance = SHEET.worksheet('expenses')
 expenses_in_range = get_expenses_in_date_range('2023-07-01', '2023-07-03', worksheet_instance)
-print(expenses_in_range)
+calculated_expenses = calculate_total_expenses(expenses_in_range)
+print(calculated_expenses)
