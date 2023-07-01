@@ -1,5 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials 
+from datetime import datetime
+
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -33,5 +35,46 @@ def add_expense():
     
     return [amount, category, date]
 
-result = add_expense()
-print(result)
+
+def validate_input(expense_data):
+    # Unpack the list into variables
+    amount, category, date = expense_data
+
+    # amount validation
+    while True:
+        try:
+            # convert amount to float to ensure it's a number
+            amount_float = float(amount)
+            
+            # ensure amount has at most 2 decimal places
+            if '.' in amount and len(amount.split('.')[1]) > 2:
+                raise ValueError
+                
+            break
+            
+        except ValueError:
+            print("Please enter a valid amount.")
+            amount = input("Enter the amount: $")
+
+    # category validation
+    while not category:
+        print("Category cannot be empty.")
+        category = input("Enter the category: ").strip().capitalize()
+    
+    # date validation
+    while True:
+        try:
+            # create a datetime object from the input string to ensure it's valid
+            datetime.strptime(date, '%Y-%m-%d')
+            break  
+            
+        except ValueError:
+            print("Please enter a valid date in the format YYYY-MM-DD.")
+            date = input("Enter the date (YYYY-MM-DD): ")
+    
+    return f'You entered the following:\nAmount: {amount}\nCategory: {category}\nDate: {date}'
+
+expense_data = add_expense()
+validated_data = validate_input(expense_data)
+print(validated_data)
+
