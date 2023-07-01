@@ -37,6 +37,15 @@ def add_expense():
 
 
 def validate_input(expense_data):
+    """
+    Validates the user input for amount, category, and date.
+    
+    Parameters:
+        expense_data (list): A list containing [amount, category, date].
+        
+    Returns:
+        str:  f-string displaying the validated amount, category, and date.
+    """
     # Unpack the list into variables
     amount, category, date = expense_data
 
@@ -72,9 +81,27 @@ def validate_input(expense_data):
             print("Please enter a valid date in the format YYYY-MM-DD.")
             date = input("Enter the date (YYYY-MM-DD): ")
     
-    return f'You entered the following:\nAmount: {amount}\nCategory: {category}\nDate: {date}'
+    return [amount, category, date]
+
+
+def update_worksheet(data, worksheet_name):
+    """
+    Updates the specified worksheet with the provided data.
+    
+    Parameters:
+        data (list): A list of data to be appended to the worksheet.
+        worksheet_name (str): The name of the worksheet to be updated.
+    """
+    worksheet = SHEET.worksheet(worksheet_name)
+
+    # calculate ID column value and prepent it to the data list
+    next_id = len(worksheet.get_all_values())
+    data.insert(0, next_id)
+
+    worksheet.append_row(data)
 
 expense_data = add_expense()
 validated_data = validate_input(expense_data)
-print(validated_data)
+update_worksheet(validated_data,'expenses')
+print("Data successfully added to the expenses worksheet") 
 
