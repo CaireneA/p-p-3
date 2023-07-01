@@ -28,8 +28,7 @@ def add_expense():
     
     # expense details
     amount = input("Enter the amount: $")
-    category = input("Enter the category: ").strip().capitalize() # clear white space
-    # category = cat.capitalize()
+    category = input("Enter the category: ").strip().capitalize() # clear white space and capitalize first letter
     date = input("Enter the date (YYYY-MM-DD): ")
     
     return [amount, category, date]
