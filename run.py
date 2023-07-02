@@ -26,9 +26,9 @@ def add_expense():
         date (str): The date of the expense entered by the user in YYYY-MM-DD format.
     """    
     # Expense details
-    amount = input("Enter the amount: $")
-    category = input("Enter the category: ").strip().capitalize()  # Clear white space and capitalize first letter
-    date = input("Enter the date (YYYY-MM-DD): ")
+    amount = input("Enter the amount: \n$")
+    category = input("Enter the category: \n").strip().capitalize()  # Clear white space and capitalize first letter
+    date = input("Enter the date (YYYY-MM-DD): \n")
     
     return [amount, category, date]
 
@@ -136,8 +136,8 @@ def get_date_range_from_user():
         end_date (str): The end date in 'YYYY-MM-DD' format.
     """
     print("Please enter a date range:")
-    start_date = input("Enter the start date (YYYY-MM-DD): ")
-    end_date = input("Enter the end date (YYYY-MM-DD): ")
+    start_date = input("Enter the start date (YYYY-MM-DD): \n")
+    end_date = input("Enter the end date (YYYY-MM-DD): \n")
     return start_date, end_date
 
 
