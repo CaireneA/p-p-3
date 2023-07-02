@@ -1,6 +1,8 @@
 import gspread
 from google.oauth2.service_account import Credentials 
 from datetime import datetime
+from collections import Counter
+
 
 
 SCOPE = [
@@ -187,6 +189,41 @@ def calculate_daily_average(total_expenses, num_days):
     return total_expenses / num_days
 
 
+def find_category(expenses, find_highest=True):
+    """
+    Finds the category with the highest or lowest expenses.
+    
+    Parameters:
+        expenses (list): A list of expenses.
+        find_highest (bool): If True, find the category with the highest expenses.
+                            If False, find the category with the lowest expenses.
+        
+    Returns:
+        list: The category with the highest or lowest expenses and the amount.
+    """
+    
+    categories = Counter()
+    
+    # Loop through expenses and add expenses to categories
+    for expense in expenses:
+        category = expense[2]  
+        amount = float(expense[1])
+        categories[category] += amount
+    
+    # Get second element of the list
+    def custom_key(x):
+        return x[1]
+    
+    if find_highest:
+        highest_category = max(categories.items(), key=custom_key)
+        return list(highest_category)
+    else:
+        lowest_category = min(categories.items(), key=custom_key)
+        return list(lowest_category)
+
+
+
+
 # expense_data = add_expense()
 # validated_data = validate_input(expense_data)
 # update_worksheet(validated_data,'expenses')
@@ -206,4 +243,10 @@ end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
 num_of_days = (end_date_obj - start_date_obj).days + 1 # +1 to include the end_date
 
 daily_average = calculate_daily_average(total_expenses_in_range, num_of_days)
-print(f"Daily average: ${daily_average:.2f}")
+# print(f"Daily average: ${daily_average:.2f}")
+
+highest_category = find_category(expenses_in_range, find_highest=True)
+print(f"Highest category: {highest_category}")
+
+lowest_category = find_category(expenses_in_range, find_highest=False)
+print(f"Lowesr category: {lowest_category}")
