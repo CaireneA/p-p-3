@@ -146,67 +146,55 @@ def get_date_range_from_user():
     return start_date, end_date
 
 
+def display_message(message):
+    """
+    Helper function to display messages in a string.
+    
+    Parameters:
+        message (str): The message to be displayed.
+    """
+    print(message)
+
+
 def calculate_total_expenses(expenses):
     """
-    Calculates total expenses for a given list of expenses.
+    Calculates total expenses for a given list of expenses and displays the result.
     
     Parameters:
         expenses (list): A list of expenses.
-        
-    Returns:
-        float: The total expenses.
     """
     # Add up the amounts from the expenses list
-    return sum(float(expense[1]) for expense in expenses)
-
-
-def display_total_expenses(total_expenses, start_date, end_date):
-    """
-    Displays total expenses in a formatted string.
-    
-    Parameters:
-        total_expenses (float): The total expenses.
-        start_date (str): The start date in 'YYYY-MM-DD' format.
-        end_date (str): The end date in 'YYYY-MM-DD' format.
-        
-    Returns:
-        str: Formatted string displaying the total expenses.
-    """
-    return f'Total expenses in range from {start_date} to {end_date} is: ${total_expenses:.2f}'
-
+    total_expenses = sum(float(expense[1]) for expense in expenses)
+    display_message(f"Total expenses: ${total_expenses:.2f}")
+    return total_expenses
 
 def calculate_daily_average(total_expenses, num_days):
     """
-    Calculates the daily average expense.
+    Calculates the daily average expense and displays the result.
     
     Parameters:
         total_expenses (float): The total expenses.
         num_days (int): The number of days.
-        
-    Returns:
-        float: The daily average.
     """
-    return total_expenses / num_days
-
+    daily_average = total_expenses / num_days
+    display_message(f"Daily average: ${daily_average:.2f}")
+    return daily_average
 
 def find_category(expenses, find_highest=True):
     """
-    Finds the category with the highest or lowest expenses.
+    Finds the category with the highest or lowest expenses and displays the result.
     
     Parameters:
         expenses (list): A list of expenses.
         find_highest (bool): If True, find the category with the highest expenses.
                             If False, find the category with the lowest expenses.
-        
-    Returns:
-        list: The category with the highest or lowest expenses and the amount.
     """
     
     categories = Counter()
     
     # Loop through expenses and add expenses to categories
     for expense in expenses:
-        category = expense[2]  
+        category = expense[2]
         amount = float(expense[1])
         categories[category] += amount
     
@@ -216,24 +204,20 @@ def find_category(expenses, find_highest=True):
     
     if find_highest:
         highest_category = max(categories.items(), key=custom_key)
-        return list(highest_category)
+        display_message(f"Highest category: {highest_category[0]} with an amount of ${highest_category[1]:.2f}")
+        return highest_category
     else:
         lowest_category = min(categories.items(), key=custom_key)
-        return list(lowest_category)
+        display_message(f"Lowest category: {lowest_category[0]} with an amount of ${lowest_category[1]:.2f}")
+        return lowest_category
 
 
-
-
-# expense_data = add_expense()
-# validated_data = validate_input(expense_data)
-# update_worksheet(validated_data,'expenses')
-# print("Data successfully added to the expenses worksheet") 
-
+# Analysis block
 worksheet_instance = SHEET.worksheet('expenses')
 start_date, end_date = get_date_range_from_user()
 expenses_in_range = get_expenses_in_date_range(start_date, end_date, worksheet_instance)
+
 total_expenses_in_range = calculate_total_expenses(expenses_in_range)
-print(display_total_expenses(total_expenses_in_range, start_date, end_date))
 
 # Convert start_date and end_date to datetime objects for subtraction
 start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
@@ -243,10 +227,7 @@ end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
 num_of_days = (end_date_obj - start_date_obj).days + 1 # +1 to include the end_date
 
 daily_average = calculate_daily_average(total_expenses_in_range, num_of_days)
-# print(f"Daily average: ${daily_average:.2f}")
 
 highest_category = find_category(expenses_in_range, find_highest=True)
-print(f"Highest category: {highest_category}")
 
 lowest_category = find_category(expenses_in_range, find_highest=False)
-print(f"Lowesr category: {lowest_category}")
