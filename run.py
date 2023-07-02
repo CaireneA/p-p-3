@@ -3,20 +3,18 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 from collections import Counter
 
-
-
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
-    ]
+]
 
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('expenses-tracker')
-
 expenses = SHEET.worksheet('expenses')
+
 
 def add_expense():
     """    
@@ -26,13 +24,10 @@ def add_expense():
         amount (str): The amount of the expense entered by the user.
         category (str): The category of the expense entered by the user.
         date (str): The date of the expense entered by the user in YYYY-MM-DD format.
-    """
-    
-    print('Welcome to your personal Expenses Tracker')
-    
+    """    
     # Expense details
     amount = input("Enter the amount: $")
-    category = input("Enter the category: ").strip().capitalize() # Clear white space and capitalize first letter
+    category = input("Enter the category: ").strip().capitalize()  # Clear white space and capitalize first letter
     date = input("Enter the date (YYYY-MM-DD): ")
     
     return [amount, category, date]
@@ -55,7 +50,7 @@ def validate_input(expense_data):
     while True:
         try:
             # Convert amount to float to ensure it's a number
-            amount_float = float(amount)
+            float(amount)
             
             # Ensure amount has at most 2 decimal places
             if '.' in amount and len(amount.split('.')[1]) > 2:
@@ -103,7 +98,6 @@ def update_worksheet(data, worksheet_name):
     worksheet.append_row(data)
 
 
-
 def get_expenses_in_date_range(start_date, end_date, worksheet):
     """
     Retrieves expenses within a given date range from the worksheet.
@@ -132,6 +126,7 @@ def get_expenses_in_date_range(start_date, end_date, worksheet):
             
     return expenses_in_range
 
+
 def get_date_range_from_user():
     """
     Prompts the user for the start and end dates of a range.
@@ -153,7 +148,7 @@ def display_message(message):
     Parameters:
         message (str): The message to be displayed.
     """
-    print(message)
+    print(message/n)
 
 
 def calculate_total_expenses(expenses):
@@ -168,6 +163,7 @@ def calculate_total_expenses(expenses):
     display_message(f"Total expenses: ${total_expenses:.2f}")
     return total_expenses
 
+
 def calculate_daily_average(total_expenses, num_days):
     """
     Calculates the daily average expense and displays the result.
@@ -179,6 +175,7 @@ def calculate_daily_average(total_expenses, num_days):
     daily_average = total_expenses / num_days
     display_message(f"Daily average: ${daily_average:.2f}")
     return daily_average
+
 
 def find_category(expenses, find_highest=True):
     """
@@ -246,6 +243,7 @@ def analyze_expenses():
     analysis_data = [[f"{start_date} to {end_date}", total_expenses_in_range, daily_average, f"{highest_category[0]}: ${highest_category[1]:.2f}", f"{lowest_category[0]}: ${lowest_category[1]:.2f}"]]
     
     return analysis_data
+
 
 def main():
     """
