@@ -65,7 +65,7 @@ def validate_input(expense_data):
     # Category validation
     while not category:
         print("Category cannot be empty.")
-        category = input("Enter the category: ").strip().capitalize()
+        category = input("Enter the category: \n").strip().capitalize()
     
     # Date validation
     while True:
@@ -76,7 +76,7 @@ def validate_input(expense_data):
             
         except ValueError:
             print("Please enter a valid date in the format YYYY-MM-DD.")
-            date = input("Enter the date (YYYY-MM-DD): ")
+            date = input("Enter the date (YYYY-MM-DD): \n")
     
     return [amount, category, date]
 
