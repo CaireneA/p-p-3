@@ -212,22 +212,74 @@ def find_category(expenses, find_highest=True):
         return lowest_category
 
 
-# Analysis block
-worksheet_instance = SHEET.worksheet('expenses')
-start_date, end_date = get_date_range_from_user()
-expenses_in_range = get_expenses_in_date_range(start_date, end_date, worksheet_instance)
+def analyze_expenses():
+    """
+    Wrapper function to the call of calculation functions.
+    """
+    # Worksheet instance
+    worksheet_instance = SHEET.worksheet('expenses')
+    
+    # Get date range from user
+    start_date, end_date = get_date_range_from_user()
+    
+    # Get expenses within date range
+    expenses_in_range = get_expenses_in_date_range(start_date, end_date, worksheet_instance)
 
-total_expenses_in_range = calculate_total_expenses(expenses_in_range)
+    # Calculate total expenses
+    total_expenses_in_range = calculate_total_expenses(expenses_in_range)
+    
+    # Convert start_date and end_date to datetime objects for subtraction
+    start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
+    
+    # Calculate number of days
+    num_of_days = (end_date_obj - start_date_obj).days + 1 # +1 to include the end_date
+    
+    # Calculate daily average
+    daily_average = calculate_daily_average(total_expenses_in_range, num_of_days)
+    
+    # Find highest and lowest categories
+    highest_category = find_category(expenses_in_range, find_highest=True)
+    lowest_category = find_category(expenses_in_range, find_highest=False)
 
-# Convert start_date and end_date to datetime objects for subtraction
-start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
-end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
+def main():
+    """
+    Main function.
+    """
+    print("Welcome to the Personal Expenses Tracker!")
+    print("This program allows you to add expenses and analyze them.")
+    
+    while True:
+        print("\nPlease choose an option:")
+        print("1. Add an expense")
+        print("2. Analyze expenses")
+        print("3. Exit")
+        
+        user_choice = input("Enter 1, 2, or 3: ").strip()
+        
+        # Add Expense
+        if user_choice == "1":
+            expense_data = add_expense()
+            
+            # Validate the input data
+            validated_data = validate_input(expense_data)
+            
+            # Update the worksheet with the validated data
+            update_worksheet(validated_data, 'expenses')
+            print("Expense added successfully!")
+        
+        # Analyze Expenses
+        elif user_choice == "2":
+            analyze_expenses()
+        
+        # Exit
+        elif user_choice == "3":
+            print("Thank you for using the Personal Expenses Tracker! Goodbye!")
+            break
+        
+        # Invalid input
+        else:
+            print("Invalid option. Please enter 1, 2, or 3.")
 
-# Calculate number of days
-num_of_days = (end_date_obj - start_date_obj).days + 1 # +1 to include the end_date
-
-daily_average = calculate_daily_average(total_expenses_in_range, num_of_days)
-
-highest_category = find_category(expenses_in_range, find_highest=True)
-
-lowest_category = find_category(expenses_in_range, find_highest=False)
+if __name__ == "__main__":
+    main()
