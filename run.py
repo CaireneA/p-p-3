@@ -214,7 +214,7 @@ def find_category(expenses, find_highest=True):
 
 def analyze_expenses():
     """
-    Wrapper function to the call of calculation functions.
+    Wrapper function to call calculation functions and return the analysis data.
     """
     # Worksheet instance
     worksheet_instance = SHEET.worksheet('expenses')
@@ -241,6 +241,11 @@ def analyze_expenses():
     # Find highest and lowest categories
     highest_category = find_category(expenses_in_range, find_highest=True)
     lowest_category = find_category(expenses_in_range, find_highest=False)
+    
+    # Construct a list of the analysis data
+    analysis_data = [[f"{start_date} to {end_date}", total_expenses_in_range, daily_average, f"{highest_category[0]}: ${highest_category[1]:.2f}", f"{lowest_category[0]}: ${lowest_category[1]:.2f}"]]
+    
+    return analysis_data
 
 def main():
     """
@@ -270,7 +275,12 @@ def main():
         
         # Analyze Expenses
         elif user_choice == "2":
-            analyze_expenses()
+            # Get analysis data from analyze_expenses function
+            analysis_data = analyze_expenses()
+
+            # Update the worksheet with the analysis data
+            update_worksheet(analysis_data[0], 'analysis')  # Pass the first element of analysis_data list, as it is a list of lists
+            print("Analysis generated successfully!")
         
         # Exit
         elif user_choice == "3":
