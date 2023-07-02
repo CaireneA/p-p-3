@@ -258,7 +258,7 @@ def main():
         print("2. Analyze expenses")
         print("3. Exit")
         
-        user_choice = input("Enter 1, 2, or 3: ").strip()
+        user_choice = input("Enter 1, 2, or 3: \n").strip()
         
         # Add Expense
         if user_choice == "1":
