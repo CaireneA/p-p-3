@@ -10,15 +10,15 @@ When you run the script, you will be welcomed and presented with three options:
 
 1. **Add an Expense**: The application will prompt you to enter the amount, category, and date of an expense. After entering the details, the expense will be saved in a Google Sheet.
    
-   ![Add Expense](/images/add_expense.png)
+   ![Add Expense](/views/add_expense.png)
 
 2. **Analyze Expenses**: The application will ask you to enter a start and end date for the analysis. It will then calculate the total expenses within that range, the daily average, and display the categories with the highest and lowest expenses.
    
-   ![Analyze Expenses](/images/analysis.png)
+   ![Analyze Expenses](/views/analysis.png)
 
 3. **Exit**: This option will terminate the application.
 
-   ![Exit](/images/exit.png)
+   ![Exit](/views/exit.png)
 
 
 ## Features
