@@ -135,9 +135,25 @@ def get_date_range_from_user():
         start_date (str): The start date in 'YYYY-MM-DD' format.
         end_date (str): The end date in 'YYYY-MM-DD' format.
     """
-    print("Please enter a date range:")
-    start_date = input("Enter the start date (YYYY-MM-DD): \n")
-    end_date = input("Enter the end date (YYYY-MM-DD): \n")
+    while True:
+        print("Please enter a date range:")
+        start_date = input("Enter the start date (YYYY-MM-DD): \n")
+        end_date = input("Enter the end date (YYYY-MM-DD): \n")
+        
+        # Convert to datetime objects for comparison
+        try:
+            start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+            end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
+        except ValueError:
+            print("Please enter valid dates in the format YYYY-MM-DD.")
+            continue
+        
+        # Validate that start date is not later than end date
+        if start_date_obj > end_date_obj:
+            print("The start date cannot be later than the end date. Please try again.")
+        else:
+            break
+
     return start_date, end_date
 
 
@@ -289,6 +305,6 @@ def main():
         else:
             print("Invalid option. Please enter 1, 2, or 3.")
 
+
 if __name__ == "__main__":
     main()
-
