@@ -1,9 +1,15 @@
 # Personal Expenses Tracker
 A Python script that tracks and analyzes personal expenses. Check out the [Live Site](https://personal-expenses-tracker-3ca08c296c82.herokuapp.com/).
 
-
 ## About
 Personal Expenses Tracker is a command line Python application that allows users to keep track of their expenses by entering the amount, category, and date of each expense. The application is also capable of analyzing the expenses over a specified date range and providing insights such as total expenses, daily average, and the categories with the highest and lowest expenses. The application uses Google Sheets as a database to store and retrieve the expense data.
+
+## APIs and External Libraries Used
+This application makes use of the following APIs and external libraries:
+- Google Drive API
+- Google Sheets API
+- gspread
+- google-auth
 
 ## How To Use
 When you run the script, you will be welcomed and presented with three options:
@@ -19,7 +25,6 @@ When you run the script, you will be welcomed and presented with three options:
 3. **Exit**: This option will terminate the application.
 
    ![Exit](/views/exit.png)
-
 
 ## Features
 
@@ -57,9 +62,17 @@ The steps for deployment are as follows:
 1. Clone this repository.
 2. Install the required libraries by running `pip install gspread google-auth`.
 3. Set up Google Sheets API credentials and save them in a file named 'creds.json'.
-4. Create a Google Sheet named 'expenses-tracker' with a worksheet named 'expenses'.
+4. Create aGoogle Sheet named 'expenses-tracker' with a worksheet named 'expenses'.
 5. Run the script using the command `python <script_name>.py`.
 
+## Resources Used
+During the development of this project, the following resources were consulted to resolve issues:
+
+- [error:No matching distribution found for python-apt==1.6.4 #5
+](https://github.com/jason9693/MusicTransformer-tensorflow2.0/issues/5)
+- [Heroku Build returning an error when deploy "backports.zoneinfo"](https://stackoverflow.com/questions/71712258/error-could-not-build-wheels-for-backports-zoneinfo-which-is-required-to-insta)
+- [IBM Documentation: RegEx](https://www.ibm.com/docs/en/cmofm/9.0.0?topic=SSEPCD_9.0.0/com.ibm.ondemand.mp.doc/arsa0257.html)
+
 ## Credits
-- This project uses the [gspread](https://gspread.readthedocs.io/en/latest/) library for interacting with Google Sheets.
-- Thank you to all who have provided feedback and suggestions for improving this Personal Expenses Tracker application.
+- Thank you to Code Institute for all the help provided.
+
